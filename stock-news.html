@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest Stock News</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #ffffff;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        li a {
+            text-decoration: none;
+            color: #333333;
+            font-weight: bold;
+        }
+
+        li a:hover {
+            text-decoration: underline;
+        }
+
+        li p {
+            margin: 5px 0 0 0;
+            font-size: 0.9em;
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Latest Stock News</h1>
+    <ul id="news-list"></ul>
+    <script>
+        async function loadNews() {
+            const apiKey = 'YOUR_API_KEY'; // Replace with your NewsAPI.org key
+            const url = `https://newsapi.org/v2/everything?q=stocks&sortBy=publishedAt&language=en&pageSize=10&apiKey=${apiKey}`;
+            try {
+                const resp = await fetch(url);
+                const data = await resp.json();
+                const list = document.getElementById('news-list');
+                data.articles.forEach(article => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="${article.url}" target="_blank">${article.title}</a>` +
+                        `<p>${article.source.name} - ${new Date(article.publishedAt).toLocaleString()}</p>`;
+                    list.appendChild(li);
+                });
+            } catch (e) {
+                document.getElementById('news-list').innerText = 'Failed to load news. Check your API key and network connection.';
+            }
+        }
+        loadNews();
+    </script>
+</body>
+</html>
